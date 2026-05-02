@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheat Codes Peptides | Bulk Menu</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- PapaParse for CSV parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <img src="assets/logo.png" alt="Cheat Codes Peptides" class="logo-img">
+            <p class="subtitle">PREMIUM BULK PEPTIDES</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="Search peptides..." class="search-input">
+        </div>
+
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading Live Pricing...</p>
+        </div>
+
+        <div id="productGrid" class="product-grid">
+            <!-- Dynamic cards will be injected here -->
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
