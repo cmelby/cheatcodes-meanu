@@ -360,3 +360,240 @@ body {
     min-width: 40px;
     text-align: center;
 }
+
+/* Checkout & Modal Styles */
+.totals-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.checkout-btn {
+    background: var(--accent-green);
+    color: var(--bg-dark);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.checkout-btn:disabled {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.3);
+    cursor: not-allowed;
+}
+
+.checkout-btn:not(:disabled):hover {
+    box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+    transform: translateY(-2px);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: #0f1423;
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.modal-title {
+    font-family: var(--font-heading);
+    color: white;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--card-border);
+    color: white;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    outline: none;
+}
+
+.form-group input:focus, .form-group textarea:focus {
+    border-color: var(--accent-green);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: white;
+    border: 1px solid var(--card-border);
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: var(--font-heading);
+}
+
+.btn-primary {
+    background: var(--accent-green);
+    color: var(--bg-dark);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: var(--font-heading);
+    font-weight: 700;
+}
+
+.invoice-wrapper {
+    max-width: 900px;
+}
+
+.invoice-scroll-area {
+    max-height: 70vh;
+    overflow-y: auto;
+    background: #000;
+    padding: 40px;
+    border: 1px solid #222;
+    margin-bottom: 20px;
+    color: white;
+}
+
+/* Invoice Specific Aesthetics */
+.invoice-template {
+    font-family: 'Inter', sans-serif;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+}
+
+.inv-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.inv-logo img {
+    height: 40px;
+    margin-bottom: 5px;
+}
+
+.inv-title {
+    color: #1E90FF;
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.inv-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.inv-section h4 {
+    color: #1E90FF;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+}
+
+.inv-section p {
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+
+.inv-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+.inv-table th {
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #333;
+    color: #aaa;
+}
+
+.inv-table td {
+    padding: 15px 0;
+    border-bottom: 1px solid #222;
+}
+
+.inv-table th.text-right, .inv-table td.text-right {
+    text-align: right;
+}
+
+.inv-totals-box {
+    width: 300px;
+    float: right;
+    border: 1px solid #222;
+    padding: 20px;
+    border-radius: 4px;
+}
+
+.inv-totals-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.inv-totals-row.total {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #333;
+}
+
+.inv-footer {
+    clear: both;
+    text-align: center;
+    padding-top: 60px;
+    letter-spacing: 4px;
+    color: #888;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.invoice-status {
+    text-align: center;
+    color: #39ff14;
+    font-family: var(--font-body);
+}

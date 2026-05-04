@@ -21,6 +21,15 @@ function updateOrderTotal() {
         previewContainer.appendChild(pill);
     }
     document.getElementById('orderTotal').innerText = '$' + total.toFixed(2);
+    
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    if (checkoutBtn) {
+        if (Object.keys(orderCart).length > 0) {
+            checkoutBtn.disabled = false;
+        } else {
+            checkoutBtn.disabled = true;
+        }
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -29,7 +38,188 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('searchInput').addEventListener('input', (e) => {
         renderGrid(e.target.value);
     });
+
+    // Modal elements
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const checkoutModal = document.getElementById('checkoutModal');
+    const invoiceModal = document.getElementById('invoiceModal');
+    const cancelCheckoutBtn = document.getElementById('cancelCheckoutBtn');
+    const generateInvoiceBtn = document.getElementById('generateInvoiceBtn');
+    const closeInvoiceBtn = document.getElementById('closeInvoiceBtn');
+    const confirmOrderBtn = document.getElementById('confirmOrderBtn');
+
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener('click', () => {
+            if (Object.keys(orderCart).length > 0) {
+                checkoutModal.classList.remove('hidden');
+            }
+        });
+    }
+
+    if (cancelCheckoutBtn) cancelCheckoutBtn.addEventListener('click', () => checkoutModal.classList.add('hidden'));
+    if (closeInvoiceBtn) closeInvoiceBtn.addEventListener('click', () => invoiceModal.classList.add('hidden'));
+
+    if (generateInvoiceBtn) {
+        generateInvoiceBtn.addEventListener('click', () => {
+            const name = document.getElementById('custName').value;
+            const email = document.getElementById('custEmail').value;
+            const company = document.getElementById('custCompany').value;
+            const address = document.getElementById('custAddress').value.replace(/\n/g, '<br>');
+
+            if (!name || !email || !address) {
+                alert('Please fill out Name, Email, and Address.');
+                return;
+            }
+
+            checkoutModal.classList.add('hidden');
+            buildInvoiceHTML(name, email, company, address);
+            invoiceModal.classList.remove('hidden');
+        });
+    }
+
+    if (confirmOrderBtn) {
+        confirmOrderBtn.addEventListener('click', async () => {
+            const email = document.getElementById('custEmail').value;
+            const invoiceHtml = document.getElementById('invoiceHTML').innerHTML;
+            const statusEl = document.getElementById('invoiceStatus');
+
+            confirmOrderBtn.disabled = true;
+            confirmOrderBtn.innerText = "Sending...";
+            statusEl.innerText = "";
+
+            try {
+                const res = await fetch('/api/send-invoice', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ customerEmail: email, invoiceHtml })
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    statusEl.innerText = "Invoice sent successfully! Check your email.";
+                    statusEl.style.color = "#39ff14";
+                    orderCart = {}; // clear cart
+                    updateOrderTotal(); // reset UI
+                    setTimeout(() => {
+                        invoiceModal.classList.add('hidden');
+                        confirmOrderBtn.disabled = false;
+                        confirmOrderBtn.innerText = "Confirm & Send Order";
+                        statusEl.innerText = "";
+                        document.querySelectorAll('.qty-val').forEach(el => el.innerText = "0");
+                        document.getElementById('cartPreview').innerHTML = '';
+                    }, 3000);
+                } else {
+                    statusEl.innerText = "Error: " + data.error;
+                    statusEl.style.color = "red";
+                    confirmOrderBtn.disabled = false;
+                    confirmOrderBtn.innerText = "Confirm & Send Order";
+                }
+            } catch (err) {
+                statusEl.innerText = "Failed to communicate with server.";
+                statusEl.style.color = "red";
+                confirmOrderBtn.disabled = false;
+                confirmOrderBtn.innerText = "Confirm & Send Order";
+            }
+        });
+    }
 });
+
+function buildInvoiceHTML(name, email, company, address) {
+    let rowsHtml = '';
+    let subtotal = 0;
+
+    for (let key in orderCart) {
+        const item = orderCart[key];
+        const parts = key.split('|');
+        const pepName = parts[0] + ' ' + (parts[1] || '');
+        
+        const pricePerKit = item.price;
+        const volumeInKits = item.qty;
+        const volumeInVials = volumeInKits * 10;
+        const pricePerVial = pricePerKit / 10;
+        const rowTotal = pricePerKit * volumeInKits;
+        subtotal += rowTotal;
+
+        rowsHtml += `
+            <tr>
+                <td>${pepName}</td>
+                <td>${volumeInVials}</td>
+                <td>${volumeInKits}</td>
+                <td class="text-right">${pricePerVial.toFixed(2)}</td>
+                <td class="text-right">${pricePerKit.toFixed(2)}</td>
+                <td class="text-right">${rowTotal.toFixed(2)}</td>
+            </tr>
+        `;
+    }
+
+    const html = `
+        <div class="invoice-template">
+            <div class="inv-header">
+                <div class="inv-logo">
+                    <!-- Base64 encoded or direct URL -->
+                    <img src="https://cheatcodespeptides.com/wp-content/uploads/2024/02/Cheat-Codes-Peptides-Logo.png" alt="Cheat Codes Logo" style="height:40px; margin-bottom:5px;">
+                    <div style="font-size:0.75rem; letter-spacing:1px; color:#aaa;">PEPTIDES | CHEATCODESPEPTIDES.COM</div>
+                </div>
+                <div class="inv-title">INVOICE</div>
+            </div>
+            
+            <div class="inv-meta">
+                <div class="inv-section">
+                    <h4>BILL TO / SHIP TO</h4>
+                    <p><strong>${name}</strong></p>
+                    ${company ? `<p>${company}</p>` : ''}
+                    <p>${address}</p>
+                    <p>${email}</p>
+                </div>
+                <div class="inv-section">
+                    <h4>PAYMENT INSTRUCTIONS</h4>
+                    <p><strong>Company Name:</strong> CHEAT CODES INC</p>
+                    <p><strong>Bank:</strong> JP Morgan Chase</p>
+                    <p><strong>Account:</strong> 2907088392</p>
+                    <p><strong>Routing:</strong> 021000021</p>
+                    <p><strong>Address:</strong> 396 Sampson, Kyle, TX 78640</p>
+                </div>
+            </div>
+
+            <table class="inv-table">
+                <thead>
+                    <tr>
+                        <th>PEP</th>
+                        <th>VOLUME IN VIALS</th>
+                        <th>VOLUME IN KITS</th>
+                        <th class="text-right">PRICE PER</th>
+                        <th class="text-right">PRICE PER KIT</th>
+                        <th class="text-right">TOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rowsHtml}
+                </tbody>
+            </table>
+
+            <div class="inv-totals-box">
+                <div class="inv-totals-row">
+                    <span>Subtotal:</span>
+                    <span>$${subtotal.toFixed(2)}</span>
+                </div>
+                <div class="inv-totals-row">
+                    <span>Shipping:</span>
+                    <span>$0.00</span>
+                </div>
+                <div class="inv-totals-row total">
+                    <span>Total:</span>
+                    <span>$${subtotal.toFixed(2)}</span>
+                </div>
+            </div>
+
+            <div class="inv-footer">
+                MOVE BEYOND BIOLOGY
+            </div>
+        </div>
+    `;
+
+    document.getElementById('invoiceHTML').innerHTML = html;
+}
 
 async function fetchData() {
     try {

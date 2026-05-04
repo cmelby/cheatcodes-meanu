@@ -1,0 +1,24 @@
+{
+  "name": "cheatcodes-menu",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmelby/cheatcodes-meanu.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/cmelby/cheatcodes-meanu/issues"
+  },
+  "homepage": "https://github.com/cmelby/cheatcodes-meanu#readme",
+  "dependencies": {
+    "nodemailer": "^8.0.7"
+  }
+}

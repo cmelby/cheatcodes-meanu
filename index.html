@@ -29,8 +29,11 @@
             <div class="sticky-top">
                 <input type="text" id="searchInput" placeholder="Search peptides..." class="search-input">
                 <div class="order-summary">
-                    <span class="summary-label">Total Order:</span>
-                    <span class="summary-total" id="orderTotal">$0.00</span>
+                    <div class="totals-group">
+                        <span class="summary-label">Total Order:</span>
+                        <span class="summary-total" id="orderTotal">$0.00</span>
+                    </div>
+                    <button class="checkout-btn" id="checkoutBtn" disabled>Checkout</button>
                 </div>
             </div>
             <div class="cart-items-preview" id="cartPreview"></div>
@@ -45,6 +48,43 @@
             <!-- Dynamic cards will be injected here -->
         </div>
     </main>
+
+    <!-- Checkout Modal -->
+    <div class="modal-overlay hidden" id="checkoutModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Billing & Shipping Details</h2>
+            <div class="form-group">
+                <input type="text" id="custName" placeholder="Full Name" required>
+            </div>
+            <div class="form-group">
+                <input type="email" id="custEmail" placeholder="Email Address" required>
+            </div>
+            <div class="form-group">
+                <input type="text" id="custCompany" placeholder="Company Name (Optional)">
+            </div>
+            <div class="form-group">
+                <textarea id="custAddress" placeholder="Full Shipping Address" rows="3" required></textarea>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="cancelCheckoutBtn">Cancel</button>
+                <button class="btn-primary" id="generateInvoiceBtn">Generate Invoice</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoice Modal -->
+    <div class="modal-overlay hidden" id="invoiceModal">
+        <div class="modal-content invoice-wrapper">
+            <div class="invoice-scroll-area" id="invoiceHTML">
+                <!-- Dynamically populated -->
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="closeInvoiceBtn">Back to Menu</button>
+                <button class="btn-primary" id="confirmOrderBtn">Confirm & Send Order</button>
+            </div>
+            <p id="invoiceStatus" class="invoice-status"></p>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>
