@@ -1,6 +1,15 @@
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1WvO9yzQDyfnU9j7fdow5qPOuMcnj7Fp7HS3gz33DS7I/export?format=csv&gid=0';
 
 let allPeptides = [];
+let orderCart = {};
+
+function updateOrderTotal() {
+    let total = 0;
+    for (let key in orderCart) {
+        total += orderCart[key].qty * orderCart[key].price;
+    }
+    document.getElementById('orderTotal').innerText = '$' + total.toFixed(2);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchData();
@@ -100,6 +109,13 @@ function renderGrid(searchTerm = '') {
                 <h3 class="product-name">${peptide.name}</h3>
                 ${variantHtml}
                 <p class="product-price" id="price-${index}">${defaultVariant.price} <span class="price-label">/ 10 vials</span></p>
+                <div class="order-controls">
+                    <div class="qty-selector">
+                        <button class="qty-btn minus" data-card-id="${index}">-</button>
+                        <div class="qty-val" id="qty-${index}">0</div>
+                        <button class="qty-btn plus" data-card-id="${index}">+</button>
+                    </div>
+                </div>
             </div>
         `;
         
@@ -120,6 +136,48 @@ function renderGrid(searchTerm = '') {
             
             document.getElementById(`overlay-dosage-${cardId}`).innerText = variant.dosageExtract;
             document.getElementById(`price-${cardId}`).innerHTML = `${variant.price} <span class="price-label">/ 10 vials</span>`;
+            
+            const cartKey = peptide.name + '|' + variant.boxPackage;
+            const currentQty = orderCart[cartKey] ? orderCart[cartKey].qty : 0;
+            document.getElementById(`qty-${cardId}`).innerText = currentQty;
+        });
+    });
+
+    document.querySelectorAll('.qty-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const cardId = e.target.getAttribute('data-card-id');
+            const isPlus = e.target.classList.contains('plus');
+            
+            const cardEl = e.target.closest('.product-card');
+            const activeVariantBtn = cardEl.querySelector('.variant-btn.active');
+            const variantIndex = activeVariantBtn.getAttribute('data-variant-index');
+            
+            const peptide = filtered[cardId];
+            const variant = peptide.variants[variantIndex];
+            const cartKey = peptide.name + '|' + variant.boxPackage;
+            
+            const priceNum = parseFloat(variant.price.replace('$', '').replace(',', ''));
+            
+            if (!orderCart[cartKey]) {
+                orderCart[cartKey] = { price: priceNum, qty: 0 };
+            }
+            
+            if (isPlus) {
+                orderCart[cartKey].qty += 1;
+            } else {
+                if (orderCart[cartKey].qty > 0) {
+                    orderCart[cartKey].qty -= 1;
+                }
+            }
+            
+            if (orderCart[cartKey].qty === 0) {
+                delete orderCart[cartKey];
+            }
+            
+            const currentQty = orderCart[cartKey] ? orderCart[cartKey].qty : 0;
+            document.getElementById(`qty-${cardId}`).innerText = currentQty;
+            
+            updateOrderTotal();
         });
     });
 }

@@ -25,8 +25,12 @@
     </header>
 
     <main class="container">
-        <div class="controls">
+        <div class="sticky-bar">
             <input type="text" id="searchInput" placeholder="Search peptides..." class="search-input">
+            <div class="order-summary">
+                <span class="summary-label">Total Order:</span>
+                <span class="summary-total" id="orderTotal">$0.00</span>
+            </div>
         </div>
 
         <div id="loading" class="loading">
