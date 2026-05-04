@@ -58,9 +58,7 @@ body {
     top: 20px;
     z-index: 100;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
+    flex-direction: column;
     margin-bottom: 40px;
     background: rgba(7, 11, 20, 0.85);
     backdrop-filter: blur(15px);
@@ -70,10 +68,19 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
+.sticky-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
 @media (max-width: 768px) {
     .sticky-bar {
-        flex-direction: column;
         padding: 15px;
+    }
+    .sticky-top {
+        flex-direction: column;
     }
 }
 
@@ -109,6 +116,44 @@ body {
     color: var(--accent-green);
     font-size: 1.5rem;
     font-weight: 800;
+}
+
+.cart-items-preview {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 5px; /* for scrollbar */
+}
+
+.cart-items-preview:not(:empty) {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--card-border);
+}
+
+.cart-items-preview::-webkit-scrollbar {
+    height: 4px;
+}
+
+.cart-items-preview::-webkit-scrollbar-thumb {
+    background: var(--card-border);
+    border-radius: 4px;
+}
+
+.cart-pill {
+    background: rgba(57, 255, 20, 0.1);
+    border: 1px solid var(--accent-green);
+    color: var(--accent-green);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    font-family: var(--font-body);
+}
+
+.cart-pill b {
+    color: white;
+    margin-left: 5px;
 }
 
 .search-input:focus {

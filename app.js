@@ -5,8 +5,20 @@ let orderCart = {};
 
 function updateOrderTotal() {
     let total = 0;
+    const previewContainer = document.getElementById('cartPreview');
+    previewContainer.innerHTML = '';
+    
     for (let key in orderCart) {
-        total += orderCart[key].qty * orderCart[key].price;
+        const item = orderCart[key];
+        total += item.qty * item.price;
+        
+        const parts = key.split('|');
+        const displayName = parts[0] + ' ' + (parts[1] || '');
+        
+        const pill = document.createElement('span');
+        pill.className = 'cart-pill';
+        pill.innerHTML = `${displayName} <b>x${item.qty}</b>`;
+        previewContainer.appendChild(pill);
     }
     document.getElementById('orderTotal').innerText = '$' + total.toFixed(2);
 }
