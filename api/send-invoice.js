@@ -47,6 +47,6 @@ export default async function handler(req, res) {
         return res.status(200).json({ success: true, message: 'Invoice sent successfully!' });
     } catch (error) {
         console.error("Error sending email:", error);
-        return res.status(500).json({ error: 'Failed to send email. Ensure Vercel environment variables are set correctly.' });
+        return res.status(500).json({ error: 'Failed to send email. Error details: ' + error.message });
     }
 }
