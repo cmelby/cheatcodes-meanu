@@ -1,10 +1,10 @@
 :root {
     --bg-dark: #070b14;
-    --card-bg: rgba(255, 255, 255, 0.03);
-    --card-border: rgba(255, 255, 255, 0.08);
-    --accent-green: #39ff14;
-    --text-main: #ffffff;
-    --text-muted: #8892b0;
+    --bg-card: #0f1423;
+    --accent-blue: #1E90FF;
+    --text-main: #e0e0e0;
+    --text-muted: #888;
+    --card-border: rgba(255, 255, 255, 0.05);
     --font-heading: 'Outfit', sans-serif;
     --font-body: 'Inter', sans-serif;
     --radius: 12px;
@@ -46,7 +46,7 @@ body {
 }
 
 .subtitle {
-    color: var(--accent-green);
+    color: var(--accent-blue);
     font-family: var(--font-heading);
     font-weight: 700;
     letter-spacing: 4px;
@@ -113,7 +113,7 @@ body {
 
 .summary-total {
     font-family: var(--font-heading);
-    color: var(--accent-green);
+    color: var(--accent-blue);
     font-size: 1.5rem;
     font-weight: 800;
 }
@@ -141,9 +141,9 @@ body {
 }
 
 .cart-pill {
-    background: rgba(57, 255, 20, 0.1);
-    border: 1px solid var(--accent-green);
-    color: var(--accent-green);
+    background: rgba(30, 144, 255, 0.1);
+    border: 1px solid var(--accent-blue);
+    color: var(--accent-blue);
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 0.85rem;
@@ -157,8 +157,8 @@ body {
 }
 
 .search-input:focus {
-    border-color: var(--accent-green);
-    box-shadow: 0 0 15px rgba(57, 255, 20, 0.2);
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 15px rgba(30, 144, 255, 0.2);
 }
 
 .loading {
@@ -172,7 +172,7 @@ body {
     height: 40px;
     border: 3px solid rgba(255,255,255,0.1);
     border-radius: 50%;
-    border-top-color: var(--accent-green);
+    border-top-color: var(--accent-blue);
     animation: spin 1s ease-in-out infinite;
     margin: 0 auto 20px;
 }
@@ -189,7 +189,7 @@ body {
 }
 
 .product-card {
-    background: var(--card-bg);
+    background: var(--bg-card);
     border: 1px solid var(--card-border);
     border-radius: var(--radius);
     padding: 16px;
@@ -201,7 +201,7 @@ body {
 
 .product-card:hover {
     transform: translateY(-5px);
-    border-color: rgba(57, 255, 20, 0.5);
+    border-color: rgba(30, 144, 255, 0.5);
 }
 
 .vial-container {
@@ -279,8 +279,8 @@ body {
 .product-price {
     font-family: var(--font-heading);
     font-size: 1.5rem;
-    color: var(--accent-green);
-    font-weight: 700;
+    color: var(--accent-blue);
+    font-weight: 800;
 }
 
 .price-label {
@@ -317,9 +317,11 @@ body {
 }
 
 .variant-btn.active {
-    background: rgba(57, 255, 20, 0.1);
-    border-color: var(--accent-green);
-    color: var(--accent-green);
+    background: var(--accent-blue);
+    border-color: var(--accent-blue);
+    color: var(--bg-dark);
+    font-weight: 600;
+    box-shadow: 0 0 10px rgba(30, 144, 255, 0.3);
 }
 
 .order-controls {
@@ -339,18 +341,23 @@ body {
 }
 
 .qty-btn {
-    background: transparent;
-    border: none;
-    color: white;
-    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    color: var(--accent-blue);
+    font-size: 1.2rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     cursor: pointer;
-    font-weight: bold;
-    transition: background 0.2s;
-    font-size: 1.1rem;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .qty-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--accent-blue);
+    color: var(--bg-dark);
 }
 
 .qty-val {
@@ -369,7 +376,7 @@ body {
 }
 
 .checkout-btn {
-    background: var(--accent-green);
+    background: var(--accent-blue);
     color: var(--bg-dark);
     font-family: var(--font-heading);
     font-weight: 700;
@@ -387,7 +394,7 @@ body {
 }
 
 .checkout-btn:not(:disabled):hover {
-    box-shadow: 0 0 15px rgba(57, 255, 20, 0.4);
+    box-shadow: 0 0 15px rgba(30, 144, 255, 0.4);
     transform: translateY(-2px);
 }
 
@@ -443,7 +450,7 @@ body {
 }
 
 .form-group input:focus, .form-group textarea:focus {
-    border-color: var(--accent-green);
+    border-color: var(--accent-blue);
 }
 
 .modal-actions {
@@ -464,7 +471,7 @@ body {
 }
 
 .btn-primary {
-    background: var(--accent-green);
+    background: var(--accent-blue);
     color: var(--bg-dark);
     border: none;
     padding: 10px 20px;
@@ -594,6 +601,6 @@ body {
 
 .invoice-status {
     text-align: center;
-    color: #39ff14;
+    color: var(--accent-blue);
     font-family: var(--font-body);
 }

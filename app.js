@@ -84,20 +84,34 @@ document.addEventListener('DOMContentLoaded', () => {
             const statusEl = document.getElementById('invoiceStatus');
 
             confirmOrderBtn.disabled = true;
-            confirmOrderBtn.innerText = "Sending...";
-            statusEl.innerText = "";
+            confirmOrderBtn.innerText = "Generating PDF...";
+            statusEl.innerText = "Generating secure PDF Invoice...";
+            statusEl.style.color = "var(--accent-blue)";
 
             try {
+                const element = document.getElementById('invoiceHTML');
+                const opt = {
+                  margin:       0.2,
+                  filename:     'CheatCodes_Invoice.pdf',
+                  image:        { type: 'jpeg', quality: 0.98 },
+                  html2canvas:  { scale: 2, backgroundColor: '#000000' },
+                  jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+
+                const pdfBase64 = await html2pdf().set(opt).from(element).outputPdf('datauristring');
+                
+                statusEl.innerText = "Sending Email...";
+
                 const res = await fetch('/api/send-invoice', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ customerEmail: email, invoiceHtml })
+                    body: JSON.stringify({ customerEmail: email, invoiceHtml, pdfBase64 })
                 });
 
                 const data = await res.json();
                 if (res.ok) {
                     statusEl.innerText = "Invoice sent successfully! Check your email.";
-                    statusEl.style.color = "#39ff14";
+                    statusEl.style.color = "var(--accent-blue)";
                     orderCart = {}; // clear cart
                     updateOrderTotal(); // reset UI
                     setTimeout(() => {

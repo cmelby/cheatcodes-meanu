@@ -19,9 +19,9 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const { customerEmail, invoiceHtml } = req.body;
+    const { customerEmail, invoiceHtml, pdfBase64 } = req.body;
 
-    if (!customerEmail || !invoiceHtml) {
+    if (!customerEmail || (!invoiceHtml && !pdfBase64)) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -39,7 +39,13 @@ export default async function handler(req, res) {
             to: customerEmail,
             cc: ['Tyler@cheatcodespeptides.com', 'chris@cheatcodespeptides.com'],
             subject: 'Your Order Invoice - Cheat Codes Peptides',
-            html: invoiceHtml,
+            html: '<p>Thank you for your order! Please find your invoice attached as a PDF document.</p><p>MOVE BEYOND BIOLOGY</p>',
+            attachments: [
+                {
+                    filename: 'CheatCodes_Invoice.pdf',
+                    path: pdfBase64
+                }
+            ]
         };
 
         await transporter.sendMail(mailOptions);
