@@ -267,15 +267,15 @@ async function fetchData() {
                     let dosageExtract = boxPackage.split('*')[0] || boxPackage;
                     dosageExtract = dosageExtract.replace(/\s/g, ''); 
                     
-                    let rawPrice = row['Price (USD)'].trim();
-                    if (!rawPrice.startsWith('$')) {
-                        rawPrice = '$' + rawPrice;
-                    }
+                    let rawPriceStr = row['Price (USD)'].trim();
+                    let numericPrice = parseFloat(rawPriceStr.replace(/[^0-9.]/g, ''));
+                    let markedUpPrice = numericPrice * 1.5;
+                    let displayPrice = '$' + markedUpPrice.toFixed(2);
 
                     grouped[name].variants.push({
                         boxPackage: boxPackage,
                         dosageExtract: dosageExtract,
-                        price: rawPrice,
+                        price: displayPrice,
                         code: row['Code'] ? row['Code'].trim() : '',
                         sheetRow: row._originalRow
                     });
