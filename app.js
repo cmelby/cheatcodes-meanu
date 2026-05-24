@@ -156,6 +156,8 @@ function buildInvoiceHTML(name, email, company, address) {
 
         rowsHtml += `
             <tr>
+                <td>${item.code || ''}</td>
+                <td>${item.sheetRow || ''}</td>
                 <td>${pepName}</td>
                 <td>${volumeInVials}</td>
                 <td>${volumeInKits}</td>
@@ -197,6 +199,8 @@ function buildInvoiceHTML(name, email, company, address) {
             <table class="inv-table">
                 <thead>
                     <tr>
+                        <th>CODE</th>
+                        <th>ROW #</th>
                         <th>PEP</th>
                         <th>VOLUME IN VIALS</th>
                         <th>VOLUME IN KITS</th>
@@ -243,7 +247,11 @@ async function fetchData() {
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                const validRows = results.data.filter(row => row['Peptide Name'] && row['Price (USD)']);
+                const rowsWithNumbers = results.data.map((row, i) => ({
+                    ...row,
+                    _originalRow: i + 2 // +1 for 1-based index, +1 for header row
+                }));
+                const validRows = rowsWithNumbers.filter(row => row['Peptide Name'] && row['Price (USD)']);
                 
                 const grouped = {};
                 validRows.forEach(row => {
@@ -267,7 +275,9 @@ async function fetchData() {
                     grouped[name].variants.push({
                         boxPackage: boxPackage,
                         dosageExtract: dosageExtract,
-                        price: rawPrice
+                        price: rawPrice,
+                        code: row['Code'] ? row['Code'].trim() : '',
+                        sheetRow: row._originalRow
                     });
                 });
                 
@@ -374,7 +384,12 @@ function renderGrid(searchTerm = '') {
             const priceNum = parseFloat(variant.price.replace('$', '').replace(',', ''));
             
             if (!orderCart[cartKey]) {
-                orderCart[cartKey] = { price: priceNum, qty: 0 };
+                orderCart[cartKey] = { 
+                    price: priceNum, 
+                    qty: 0,
+                    code: variant.code,
+                    sheetRow: variant.sheetRow
+                };
             }
             
             if (isPlus) {
