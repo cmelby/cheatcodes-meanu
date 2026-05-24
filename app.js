@@ -170,8 +170,7 @@ function buildInvoiceHTML(name, email, company, address) {
         <div class="invoice-template">
             <div class="inv-header">
                 <div class="inv-logo">
-                    <!-- Base64 encoded or direct URL -->
-                    <img src="https://cheatcodespeptides.com/wp-content/uploads/2024/02/Cheat-Codes-Peptides-Logo.png" alt="Cheat Codes Logo" style="height:40px; margin-bottom:5px;">
+                    <img src="assets/logo.png" alt="Cheat Codes Logo" style="height:40px; margin-bottom:5px;">
                     <div style="font-size:0.75rem; letter-spacing:1px; color:#aaa;">PEPTIDES | CHEATCODESPEPTIDES.COM</div>
                 </div>
                 <div class="inv-title">INVOICE</div>
