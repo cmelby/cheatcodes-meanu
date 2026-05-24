@@ -1,4 +1,4 @@
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1WvO9yzQDyfnU9j7fdow5qPOuMcnj7Fp7HS3gz33DS7I/export?format=csv&gid=0';
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1iZFoD9eG1Rou-4wSUlFllTyE2ZzM_rS27kFMfuE3CDM/export?format=csv&gid=1354480122';
 
 let allPeptides = [];
 let orderCart = {};
