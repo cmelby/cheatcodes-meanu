@@ -89,35 +89,48 @@ document.addEventListener('DOMContentLoaded', () => {
             statusEl.style.color = "var(--accent-blue)";
 
             try {
-                const element = document.getElementById('invoiceHTML');
-                const modalContent = element.closest('.modal-content');
+                // Target the actual template inside the scroll area to avoid padding issues
+                const element = document.querySelector('.invoice-template');
+                const scrollArea = document.getElementById('invoiceHTML');
+                const modalContent = scrollArea.closest('.modal-content');
                 
-                // Temporarily expand both the invoice and its parent modal to prevent cutoff
-                const origMaxHeight = element.style.maxHeight;
-                const origOverflow = element.style.overflowY;
+                // Temporarily expand parents to prevent cutoff
+                const origScrollMaxHeight = scrollArea.style.maxHeight;
+                const origScrollOverflow = scrollArea.style.overflowY;
                 const origModalMaxHeight = modalContent.style.maxHeight;
                 const origModalOverflow = modalContent.style.overflowY;
 
-                element.style.maxHeight = 'none';
-                element.style.overflowY = 'visible';
+                scrollArea.style.maxHeight = 'none';
+                scrollArea.style.overflowY = 'visible';
                 modalContent.style.maxHeight = 'none';
                 modalContent.style.overflowY = 'visible';
+                
+                // Force minimum height to fill a standard Letter page (width 900px -> height ~1165px)
+                const origMinHeight = element.style.minHeight;
+                const origBg = element.style.backgroundColor;
+                const origPadding = element.style.padding;
+                element.style.minHeight = '1165px';
+                element.style.backgroundColor = '#000000';
+                element.style.padding = '40px'; // Add padding directly to template since margin is 0
 
                 const opt = {
-                  margin:       0.2,
+                  margin:       0, // Zero margin to fill the entire PDF page with black
                   filename:     'CheatCodes_Invoice.pdf',
                   image:        { type: 'jpeg', quality: 0.98 },
-                  html2canvas:  { scale: 2, backgroundColor: '#000000' },
+                  html2canvas:  { scale: 2, backgroundColor: '#000000', scrollY: 0 },
                   jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
 
                 const pdfBase64 = await html2pdf().set(opt).from(element).outputPdf('datauristring');
                 
                 // Restore original styles
-                element.style.maxHeight = origMaxHeight;
-                element.style.overflowY = origOverflow;
+                scrollArea.style.maxHeight = origScrollMaxHeight;
+                scrollArea.style.overflowY = origScrollOverflow;
                 modalContent.style.maxHeight = origModalMaxHeight;
                 modalContent.style.overflowY = origModalOverflow;
+                element.style.minHeight = origMinHeight;
+                element.style.backgroundColor = origBg;
+                element.style.padding = origPadding;
                 
                 statusEl.innerText = "Sending Email...";
 
