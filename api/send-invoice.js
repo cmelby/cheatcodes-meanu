@@ -35,7 +35,7 @@ export default async function handler(req, res) {
         });
 
         const mailOptions = {
-            from: `"Cheat Codes Peptides" <${process.env.SMTP_EMAIL}>`,
+            from: `"Cheat Codes Peptides" <info@cheatcodespeptides.com>`,
             to: customerEmail,
             cc: ['Tyler@cheatcodespeptides.com', 'chris@cheatcodespeptides.com'],
             subject: 'Your Order Invoice - Cheat Codes Peptides',
